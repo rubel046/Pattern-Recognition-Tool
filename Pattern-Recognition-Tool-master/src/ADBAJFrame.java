@@ -1,0 +1,250 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/**
+ *
+ * @author mahfuz11
+ */
+import java.io.File;
+import java.io.IOException;
+import java.util.Scanner;
+import javax.swing.JTextArea;
+import adaptiveDecisionBoundaryAlgorithm.Test;
+public class ADBAJFrame extends javax.swing.JFrame {
+
+    /**
+     * Creates new form ADBAJFrame
+     */
+    public static Test t;
+    public ADBAJFrame() {
+        initComponents();
+        t = new Test(jTextArea2);
+    }
+    
+    
+    public void ADBAlgorithm()throws IOException
+    {
+        int TotalSampleData;
+        double SAMPLES[][] = new double[10][3];
+        int count=0;
+        //Scanner sc = new Scanner( new File("adba.txt"));
+        //Scanner sc = new Scanner( new File("adba1.txt"));
+        Scanner sc = new Scanner( new File("adba2.txt"));
+        //System.out.println("Training Samples data");
+        jTextArea2.append("Training Samples data");
+        jTextArea2.append("\n");
+        while(sc.hasNextDouble())
+        {
+            SAMPLES[count][0] = sc.nextDouble();
+            SAMPLES[count][1] = sc.nextDouble();
+            SAMPLES[count][2] = sc.nextDouble();
+            //System.out.println(SAMPLES[count][0]+"\t"+SAMPLES[count][1]+"\t"+SAMPLES[count][2]);
+            jTextArea2.append(SAMPLES[count][0]+"\t"+SAMPLES[count][1]+"\t"+SAMPLES[count][2]);
+            jTextArea2.append("\n");
+            
+            count++;
+        }
+        sc.close();
+        
+        TotalSampleData = count;
+        //System.out.println("Total Sample Data = "+TotalSampleData);
+        jTextArea2.append("Total Sample Data = "+TotalSampleData);
+        jTextArea2.append("\n");
+        boolean isStillMoving = true;
+        double W0 = 0, W1 = 0, W2 = 0, D, c = 1, k = 1,sgnD=0, newW0,newW1,newW2;
+        String Error;
+        int iteration = 0, errorCount; ;
+        //System.out.println("t\t"+"i"+"\t"+" x1\t"+" x2\t"+"d\t"+"Old W0\t"+"Old W1\t"+"Old W2\t"+"D\t"+"Error?"+"  New W0"+"  New W1"+"  New W2");
+        jTextArea2.append("t\t"+"i"+"\t"+" x1\t"+" x2\t"+"d\t"+"Old W0\t"+"Old W1\t"+"Old W2\t"+"D\t"+"Error?"+"\tNew W0"+"\tNew W1"+"\tNew W2");
+        jTextArea2.append("\n");
+        while(isStillMoving)
+        {
+            errorCount = 0 ;
+            for(int i = 0; i <TotalSampleData; i++)
+            {
+                
+                iteration++;
+                D = W0 + W1* SAMPLES[i][0] + W2* SAMPLES[i][1];
+                if(D>=0)
+                    {
+                        sgnD = 1;
+                    }
+                if(D<0)
+                {
+                    sgnD = -1;
+                }
+                if(sgnD != SAMPLES[i][2])
+                {
+                    
+                    newW0 = W0 + c*SAMPLES[i][2]*k;
+                    newW1 = W1 + c*SAMPLES[i][2]*SAMPLES[i][0];
+                    newW2 = W2 + c*SAMPLES[i][2]*SAMPLES[i][1];
+                    Error = "Yes";
+                    //System.out.println(iteration +"\t"+(i+1)+"\t"+ SAMPLES[i][0]+"\t"+SAMPLES[i][1]+"\t"+SAMPLES[i][2]+"\t"+W0+"\t"+W1+"\t"+W2+"\t"+D+"\t"+Error+"\t"+newW0+"\t"+newW1+"\t"+newW2);
+                    jTextArea2.append(iteration +"\t"+(i+1)+"\t"+ SAMPLES[i][0]+"\t"+SAMPLES[i][1]+"\t"+SAMPLES[i][2]+"\t"+W0+"\t"+W1+"\t"+W2+"\t"+D+"\t"+Error+"\t"+newW0+"\t"+newW1+"\t"+newW2);
+                    jTextArea2.append("\n");
+                    W0 = newW0;
+                    W1 = newW1;
+                    W2 = newW2;
+                }
+                else
+                {
+                    Error = "No";
+                    newW0 = W0;
+                    newW1 = W1;
+                    newW2 = W2;
+                    //System.out.println(iteration +"\t"+(i+1)+"\t"+ SAMPLES[i][0]+"\t"+SAMPLES[i][1]+"\t"+SAMPLES[i][2]+"\t"+W0+"\t"+W1+"\t"+W2+"\t"+D+"\t"+Error+"\t"+newW0+"\t"+newW1+"\t"+newW2);
+                    jTextArea2.append(iteration +"\t"+(i+1)+"\t"+ SAMPLES[i][0]+"\t"+SAMPLES[i][1]+"\t"+SAMPLES[i][2]+"\t"+W0+"\t"+W1+"\t"+W2+"\t"+D+"\t"+Error+"\t"+newW0+"\t"+newW1+"\t"+newW2);
+                    jTextArea2.append("\n");
+                    errorCount++;
+                    //System.out.println("Errorcount= "+errorCount);
+                    if(errorCount == TotalSampleData)
+                    {
+                        isStillMoving = false;
+                    }
+                }
+            }
+        }
+        ADBAGraphJFrame aj = new ADBAGraphJFrame();
+        int x1 = 0, x2 = 60;
+        aj.x1 = x1;
+        aj.y1 = (int) Math.round((-W0-W1*x1)/W2);
+        aj.x2 = x2;
+        aj.y2 = (int)Math.round((-W0-W1*x2)/W2);
+        jTextArea2.append("\n"+"x1 = "+aj.x1+" y1 = "+aj.y1+" x2 = " +aj.x2+" y2 = "+aj.y2+"\n");
+        
+        
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
+        jLabel1 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTextArea2 = new javax.swing.JTextArea();
+        jLabel2 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jScrollPane1.setViewportView(jTextArea1);
+
+        jLabel1.setText("jLabel1");
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jTextArea2.setColumns(20);
+        jTextArea2.setRows(5);
+        jScrollPane2.setViewportView(jTextArea2);
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel2.setText("Adaptive Decision Boundary Algorithm");
+        jLabel2.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+
+        jButton1.setText("CALCULATE");
+        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jButton1.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap(318, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 356, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(193, 193, 193))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jButton1)
+                        .addGap(336, 336, 336))))
+            .addComponent(jScrollPane2)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        try
+        {
+            ADBAlgorithm();
+        }
+        catch (Exception ex) {
+        }
+        
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(ADBAJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(ADBAJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(ADBAJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(ADBAJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new ADBAJFrame().setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTextArea jTextArea2;
+    // End of variables declaration//GEN-END:variables
+}
